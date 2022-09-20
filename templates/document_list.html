@@ -1,0 +1,11 @@
+{{define "page"}}
+<main>
+    <ul>
+        {{range .}}
+        <li>
+            <a href="/docs/{{.ID}}">{{.Title}}</a>
+        </li>
+        {{end}}
+    </ul>
+</main>
+{{end}}

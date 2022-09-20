@@ -1,0 +1,56 @@
+linters-settings:
+  revive:
+    min-confidence: 0
+  lll:
+    line-length: 80
+  misspell:
+    locale: US
+
+linters:
+  disable-all: true
+  enable:
+    - deadcode
+    - depguard
+    - errcheck
+    - gochecknoinits
+    - goimports
+    - revive
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - exportloopref
+    - staticcheck
+    - typecheck
+    - unconvert
+    - unused
+    - varcheck
+    - whitespace
+
+issues:
+  exclude-rules:
+    - linters:
+        - lll
+      source: "^//go:generate "
+    - linters:
+        - lll
+      source: "`json:"
+    - linters:
+        - revive
+      text: "returns unexported type"
+
+run:
+  go: "1.18"
+  timeout: 2m
+  allow-parallel-runners: true
+  modules-download-mode: readonly
+  skip-dirs:
+    - go
+  skip-files:
+    - .*_generated.go
+    - .*_mock.go
+    - .*_mock_test.go

@@ -31,18 +31,23 @@ func main() {
 
 	// Instantiate Pages
 	userPage := user.NewPage()
+	documentPage := document.NewPage(documentStore)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		t, err := template.ParseFiles("templates/index.html")
+		t, err := template.ParseFiles("templates/layout.html", "templates/index.html")
 		if err != nil {
 			panic(err)
 		}
 		t.Execute(w, nil)
 	})
+
+	// Page Documents
+	r.Get("/docs", documentPage.RenderAll)
+	r.Get("/docs/{id}", documentPage.RenderOne)
 
 	// API Documents
 	r.Post("/api/docs", documentApi.InsertHandler)
@@ -59,7 +64,11 @@ func main() {
 	r.Get("/login", userPage.Render)
 	r.Post("/login", userPage.Form)
 
-	// Server
+	// static files
+	fileServer := http.FileServer(http.Dir("./static/"))
+	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
+
+	// serve
 	fmt.Println("Listening on http://127.0.0.1:8000/")
 	http.ListenAndServe(":8000", r)
 }

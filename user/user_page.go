@@ -18,7 +18,7 @@ func NewPage() *Page {
 
 func (page *Page) Render(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.ParseFiles("templates/login.html")
+	t, err := template.ParseFiles("templates/layout.html", "templates/login.html")
 	if err != nil {
 		page.logger.With(
 			zap.Error(err),
@@ -26,7 +26,10 @@ func (page *Page) Render(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	t.Execute(w, nil)
+	err = t.Execute(w, nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (page *Page) Form(w http.ResponseWriter, r *http.Request) {

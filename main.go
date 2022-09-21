@@ -47,6 +47,8 @@ func main() {
 
 	// Page Documents
 	r.Get("/docs", documentPage.RenderAll)
+	r.Get("/new/doc", documentPage.RenderNew)
+	r.Post("/new/doc", documentPage.SaveNew)
 	r.Get("/docs/{id}", documentPage.RenderOne)
 
 	// API Documents

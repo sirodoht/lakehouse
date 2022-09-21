@@ -1,6 +1,8 @@
 package document
 
 import (
+	"time"
+	"fmt"
 	"database/sql"
 	"html/template"
 	"errors"
@@ -79,4 +81,55 @@ func (page *Page) RenderAll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (page *Page) RenderNew(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	t, err := template.ParseFiles("templates/layout.html", "templates/document_new.html")
+	if err != nil {
+		page.logger.With(
+			zap.Error(err),
+		).Error("cannot compile doc new template")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	err = t.Execute(w, nil)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (page *Page) SaveNew(w http.ResponseWriter, r *http.Request) {
+	title := r.FormValue("title")
+	body := r.FormValue("body")
+
+	type ReqBody struct {
+		Title string
+		Body string
+	}
+	rb := &ReqBody{
+		Title: title,
+		Body: body,
+	}
+	fmt.Printf("%+v", rb)
+
+	if rb.Title == "" || rb.Body == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	now := time.Now()
+	d := &Document{
+		Title:     rb.Title,
+		Body:      rb.Body,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	_, err := page.store.Insert(r.Context(), d)
+	if err != nil {
+		panic(err)
+	}
+
+	http.Redirect(w, r, "/docs", http.StatusSeeOther)
 }

@@ -63,8 +63,10 @@ func main() {
 	r.Patch("/api/users/{id}", userApi.UpdateHandler)
 
 	// Page Users
-	r.Get("/login", userPage.Render)
-	r.Post("/login", userPage.Form)
+	r.Get("/signup", userPage.RenderNew)
+	r.Post("/signup", userPage.SaveNew)
+	r.Get("/login", userPage.RenderLogin)
+	r.Post("/login", userPage.CreateSession)
 
 	// static files
 	fileServer := http.FileServer(http.Dir("./static/"))

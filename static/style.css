@@ -478,34 +478,34 @@ form .helptext {
     text-decoration: underline;
 }
 
-/* blog index */
-.blog a:hover {
+/* docs list */
+.docs a:hover {
     text-decoration: underline;
 }
 
-.blog a:visited {
+.docs a:visited {
     color: var(--purple-color);
 }
 
-.blog a:active {
+.docs a:active {
     color: var(--red-color);
 }
 
-.posts {
+.docs {
     list-style: none;
     padding-left: 0;
 }
 
-.posts li {
+.docs li {
     margin-bottom: 24px;
 }
 
-.posts small {
+.docs small {
     white-space: nowrap;
     color: var(--dark-grey-color);
 }
 
-.posts time {
+.docs time {
     white-space: nowrap;
 }
 
@@ -514,53 +514,44 @@ form .helptext {
     margin: 16px 0 24px;
 }
 
-/* post detail */
-.posts-item-brand {
+/* doc detail */
+.docs-item-brand {
     display: block;
     margin-top: 16px;
     margin-bottom: 16px;
     color: var(--dark-grey-color);
 }
 
-.posts-item-brand:hover {
+.docs-item-brand:hover {
     text-decoration: none;
 }
 
-.posts-item-brand::before {
+.docs-item-brand::before {
     content: "« ";
 }
 
-.posts-item-title {
+.docs-item-title {
     margin-bottom: 8px;
 }
 
-.posts-item-byline {
+.docs-item-byline {
     color: var(--dark-grey-color);
     margin-bottom: 8px;
 }
 
-.posts-item-body p {
+.docs-item-body p {
     font-family: serif;
     font-size: 1.1rem;
 }
 
-.posts-item-body li {
+.docs-item-body li {
     font-family: serif;
     font-size: 1.1rem;
 }
 
-.posts-item-body img {
+.docs-item-body img {
     max-width: 100%;
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-/* dashboard */
-.dashboard-cta {
-    font-size: 1.1rem;
-}
-
-.dashboard-list {
-    line-height: 1.6;
 }

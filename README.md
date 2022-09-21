@@ -1,4 +1,4 @@
-# lakehouse
+# lakehousewiki
 
 Wiki with live editing.
 

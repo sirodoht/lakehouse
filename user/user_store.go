@@ -3,12 +3,14 @@ package user
 import (
 	"fmt"
 	"context"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 )
 
 type Store interface {
 	Insert(context.Context, *User) (int64, error)
+	InsertPage(context.Context, string, string, string) (int64, error)
 	GetOne(context.Context, int64) (*User, error)
 	Update(context.Context, int64, string, string) (error)
 }
@@ -42,6 +44,36 @@ func (s *SQLStore) Insert(ctx context.Context, d *User) (int64, error) {
 	}
 	if rows.Next() {
 		rows.Scan(&id)
+	}
+	return id, nil
+}
+
+func (s *SQLStore) InsertPage(ctx context.Context, username string, email string, passwordHash string) (int64, error) {
+	var id int64
+	timenow := time.Now()
+	row := s.db.QueryRow(`
+		INSERT INTO users (
+			email,
+			username,
+			password_hash,
+			created_at,
+			updated_at
+		) VALUES (
+			$1,
+			$2,
+			$3,
+			$4,
+			$5
+		) RETURNING id`,
+		email,
+		username,
+		passwordHash,
+		timenow,
+		timenow,
+	)
+	err := row.Scan(&id)
+	if err != nil {
+		return 0, err
 	}
 	return id, nil
 }

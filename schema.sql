@@ -11,5 +11,6 @@ CREATE TABLE users (
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     username VARCHAR(300) NOT NULL,
-    email VARCHAR(300) NOT NULL
+    email VARCHAR(300) NOT NULL,
+    password_hash VARCHAR(300) NOT NULL
 );

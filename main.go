@@ -30,7 +30,7 @@ func main() {
 	userApi := user.NewAPI(userStore)
 
 	// Instantiate Pages
-	userPage := user.NewPage()
+	userPage := user.NewPage(userStore)
 	documentPage := document.NewPage(documentStore)
 
 	r := chi.NewRouter()

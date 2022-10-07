@@ -1,6 +1,6 @@
 # lakehousewiki
 
-Wiki with live editing.
+Wiki with real-time editing.
 
 ## License
 

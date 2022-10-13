@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"golang.org/x/crypto/bcrypt"
 	"go.uber.org/zap"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Page struct {
@@ -38,31 +38,40 @@ func (page *Page) RenderLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-
-	type ReqBody struct {
+	var data struct {
 		Username string
 		Password string
 	}
-	rb := &ReqBody{
-		Username: username,
-		Password: password,
+	data.Username = r.FormValue("username")
+	data.Password = r.FormValue("password")
+	fmt.Printf("%+v", data)
+
+	user, err := page.store.GetOneByUsername(r.Context(), data.Username)
+	fmt.Printf("%+v", user)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "Something went wrong.", http.StatusInternalServerError)
+		return
 	}
-	fmt.Printf("%+v", rb)
 
-	//row := us.DB.QueryRow(`
-	//	SELECT id, password_hash
-	//	FROM users WHERE username=$1`, username)
-	//err := row.Scan(&user.ID, &user.PasswordHash)
-	//if err != nil {
-	//	return nil, fmt.Errorf("authenticate error: %w", err)
-	//}
+	fmt.Printf("Checking password=%+v and hash=%+v", data.Password, user.PasswordHash)
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(data.Password))
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "Something went wrong.", http.StatusInternalServerError)
+		return
+	}
 
-	//err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
-	//if err != nil {
-	//	return nil, fmt.Errorf("authenticate error: %w", err)
-	//}
+	cookie := http.Cookie{
+		Name:     "session",
+		Value:    "9azk",
+		Path:     "/",
+		HttpOnly: true,
+	}
+	http.SetCookie(w, &cookie)
+
+	// respond
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func (page *Page) RenderNew(w http.ResponseWriter, r *http.Request) {
@@ -100,13 +109,13 @@ func (page *Page) SaveNew(w http.ResponseWriter, r *http.Request) {
 
 	// build req body
 	type ReqBody struct {
-		Username string
-		Email string
+		Username     string
+		Email        string
 		PasswordHash string
 	}
 	rb := &ReqBody{
-		Username: username,
-		Email: email,
+		Username:     username,
+		Email:        email,
 		PasswordHash: passwordHash,
 	}
 	fmt.Printf("%+v", rb)

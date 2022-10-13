@@ -12,7 +12,8 @@ type Store interface {
 	Insert(context.Context, *User) (int64, error)
 	InsertPage(context.Context, string, string, string) (int64, error)
 	GetOne(context.Context, int64) (*User, error)
-	Update(context.Context, int64, string, string) (error)
+	GetOneByUsername(context.Context, string) (*User, error)
+	Update(context.Context, int64, string, string) error
 }
 
 type SQLStore struct {
@@ -101,6 +102,20 @@ func (s *SQLStore) GetOne(ctx context.Context, id int64) (*User, error) {
 	)
 	if err != nil {
 		return nil, err
+	}
+	return users[0], nil
+}
+
+func (s *SQLStore) GetOneByUsername(ctx context.Context, username string) (*User, error) {
+	var users []*User
+	err := s.db.SelectContext(
+		ctx,
+		&users,
+		`SELECT * FROM users WHERE username=$1`,
+		username,
+	)
+	if err != nil {
+		panic(err)
 	}
 	return users[0], nil
 }

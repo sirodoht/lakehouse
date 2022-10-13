@@ -20,6 +20,10 @@ lint:
 	$(info Running Go linters)
 	@GOGC=off golangci-lint run
 
+.PHONY: format
+format:
+	go fmt ./...
+
 .PHONY: serve
 serve:
 	modd

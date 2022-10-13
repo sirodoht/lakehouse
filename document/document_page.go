@@ -1,13 +1,13 @@
 package document
 
 import (
-	"time"
-	"fmt"
 	"database/sql"
-	"html/template"
 	"errors"
+	"fmt"
+	"html/template"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
@@ -105,11 +105,11 @@ func (page *Page) SaveNew(w http.ResponseWriter, r *http.Request) {
 
 	type ReqBody struct {
 		Title string
-		Body string
+		Body  string
 	}
 	rb := &ReqBody{
 		Title: title,
-		Body: body,
+		Body:  body,
 	}
 	fmt.Printf("%+v", rb)
 

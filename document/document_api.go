@@ -1,10 +1,10 @@
 package document
 
 import (
-	"io/ioutil"
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"

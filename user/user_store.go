@@ -1,8 +1,8 @@
 package user
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -78,13 +78,13 @@ func (s *SQLStore) InsertPage(ctx context.Context, username string, email string
 	return id, nil
 }
 
-func (s *SQLStore) Update(ctx context.Context, id int64, field string, value string) (error) {
+func (s *SQLStore) Update(ctx context.Context, id int64, field string, value string) error {
 	sql := fmt.Sprintf("UPDATE users SET %s=:value WHERE id=:id", field)
 	_, err := s.db.NamedExec(sql, map[string]interface{}{
-			"field": field,
-			"value": value,
-			"id": id,
-		})
+		"field": field,
+		"value": value,
+		"id":    id,
+	})
 	if err != nil {
 		return err
 	}

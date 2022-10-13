@@ -1,8 +1,8 @@
 package document
 
 import (
-	"fmt"
 	"context"
+	"fmt"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -12,7 +12,7 @@ type Store interface {
 	Insert(context.Context, *Document) (int64, error)
 	GetAll(context.Context) ([]*Document, error)
 	GetOne(context.Context, int64) (*Document, error)
-	Update(context.Context, int64, string, string) (error)
+	Update(context.Context, int64, string, string) error
 }
 
 type SQLStore struct {
@@ -48,13 +48,13 @@ func (s *SQLStore) Insert(ctx context.Context, d *Document) (int64, error) {
 	return id, nil
 }
 
-func (s *SQLStore) Update(ctx context.Context, id int64, field string, value string) (error) {
+func (s *SQLStore) Update(ctx context.Context, id int64, field string, value string) error {
 	sql := fmt.Sprintf("UPDATE documents SET %s=:value WHERE id=:id", field)
 	_, err := s.db.NamedExec(sql, map[string]interface{}{
-			"field": field,
-			"value": value,
-			"id": id,
-		})
+		"field": field,
+		"value": value,
+		"id":    id,
+	})
 	if err != nil {
 		return err
 	}

@@ -37,16 +37,15 @@ func main() {
 	r.Use(middleware.Logger)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		loggedIn := false
 		c, err := r.Cookie("session")
 		if err != nil {
 			fmt.Println(err)
-			http.Error(w, "fail to find session cookie", http.StatusInternalServerError)
-			return
-		}
-		fmt.Printf("here = %+v", c)
-		loggedIn := false
-		if c.Name == "session" && c.Value == "9azk" {
-			loggedIn = true
+		} else {
+			fmt.Printf("here = %+v", c)
+			if c.Name == "session" && c.Value == "9azk" {
+				loggedIn = true
+			}
 		}
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")

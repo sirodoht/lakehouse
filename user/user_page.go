@@ -117,18 +117,6 @@ func (page *Page) SaveNew(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	// render response
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.ParseFiles("templates/layout.html", "templates/login.html")
-	if err != nil {
-		page.logger.With(
-			zap.Error(err),
-		).Error("cannot compile login template")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	err = t.Execute(w, nil)
-	if err != nil {
-		panic(err)
-	}
+	// respond
+	http.Redirect(w, r, "/login", http.StatusFound)
 }

@@ -1,8 +1,3 @@
-.PHONY: lint
-lint:
-	$(info Running Go linters)
-	@GOGC=off golangci-lint run
-
 .PHONY: pginit
 pginit:
 	PGDATA=postgres-data/ pg_ctl init
@@ -19,3 +14,12 @@ pgstart:
 .PHONY: pgstop
 pgstop:
 	PGDATA=postgres-data/ pg_ctl stop
+
+.PHONY: lint
+lint:
+	$(info Running Go linters)
+	@GOGC=off golangci-lint run
+
+.PHONY: serve
+serve:
+	modd

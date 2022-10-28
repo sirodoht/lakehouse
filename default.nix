@@ -3,5 +3,6 @@ mkShell {
   buildInputs = [
     postgresql_13
     golangci-lint
+    shellcheck
   ];
 }

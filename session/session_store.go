@@ -26,10 +26,10 @@ func (s *SQLStore) Insert(ctx context.Context, d *Session) (int64, error) {
 	rows, err := s.db.NamedQuery(`
 		INSERT INTO sessions (
 			user_id,
-			token_hash,
+			token_hash
 		) VALUES (
 			:user_id,
-			:token_hash,
+			:token_hash
 		) RETURNING id`, d)
 	if err != nil {
 		return 0, err

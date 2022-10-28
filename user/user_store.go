@@ -117,5 +117,8 @@ func (s *SQLStore) GetOneByUsername(ctx context.Context, username string) (*User
 	if err != nil {
 		panic(err)
 	}
+	if len(users) == 0 {
+		return nil, fmt.Errorf("No user exists with this username.")
+	}
 	return users[0], nil
 }

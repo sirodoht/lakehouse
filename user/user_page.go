@@ -69,6 +69,7 @@ func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// create session token
 	tokenBytes := make([]byte, 32)
 	nRead, err := rand.Read(tokenBytes)
 	if err != nil {
@@ -88,6 +89,7 @@ func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	// set cookie with session token
 	cookie := http.Cookie{
 		Name:     "session",
 		Value:    tokenString,

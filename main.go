@@ -7,7 +7,9 @@ import (
 	"os"
 
 	"git.sr.ht/~sirodoht/lakehousewiki/document"
+	"git.sr.ht/~sirodoht/lakehousewiki/session"
 	"git.sr.ht/~sirodoht/lakehousewiki/user"
+
 	chi "github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jmoiron/sqlx"
@@ -21,16 +23,17 @@ func main() {
 		panic(err)
 	}
 
-	// Instantiate stores
+	// instantiate stores
 	documentStore := document.NewSQLStore(db)
 	userStore := user.NewSQLStore(db)
+	sessionStore := session.NewSQLStore(db)
 
-	// Instantiate APIs
+	// instantiate APIs
 	documentApi := document.NewAPI(documentStore)
 	userApi := user.NewAPI(userStore)
 
-	// Instantiate Pages
-	userPage := user.NewPage(userStore)
+	// instantiate Pages
+	userPage := user.NewPage(userStore, sessionStore)
 	documentPage := document.NewPage(documentStore)
 
 	r := chi.NewRouter()

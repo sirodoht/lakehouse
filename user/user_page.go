@@ -1,23 +1,30 @@
 package user
 
 import (
+	"crypto/sha256"
+	"encoding/base64"
 	"fmt"
 	"html/template"
+	"math/rand"
 	"net/http"
 	"strings"
+
+	"git.sr.ht/~sirodoht/lakehousewiki/session"
 
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Page struct {
-	store  Store
-	logger *zap.Logger
+	store        Store
+	sessionStore session.Store
+	logger       *zap.Logger
 }
 
-func NewPage(store Store) *Page {
+func NewPage(store Store, sessionStore session.Store) *Page {
 	return &Page{
-		store: store,
+		store:        store,
+		sessionStore: sessionStore,
 	}
 }
 
@@ -62,9 +69,28 @@ func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tokenBytes := make([]byte, 32)
+	nRead, err := rand.Read(tokenBytes)
+	if err != nil {
+		panic(fmt.Errorf("session: %w", err))
+	}
+	if nRead < 32 {
+		panic(fmt.Errorf("session: not enough random bytes"))
+	}
+	tokenHash := sha256.Sum256(tokenBytes)
+	tokenString := base64.URLEncoding.EncodeToString(tokenHash[:])
+	session := &session.Session{
+		UserID:    user.ID,
+		TokenHash: tokenString,
+	}
+	_, err = page.sessionStore.Insert(r.Context(), session)
+	if err != nil {
+		panic(err)
+	}
+
 	cookie := http.Cookie{
 		Name:     "session",
-		Value:    "9azk",
+		Value:    tokenString,
 		Path:     "/",
 		HttpOnly: true,
 	}

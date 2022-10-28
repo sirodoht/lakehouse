@@ -29,4 +29,4 @@ format:
 
 .PHONY: serve
 serve:
-	modd
+	CGO_ENABLED=0 modd

@@ -14,3 +14,9 @@ CREATE TABLE users (
     email VARCHAR(300) NOT NULL,
     password_hash VARCHAR(300) NOT NULL
 );
+
+CREATE TABLE sessions (
+  id SERIAL PRIMARY KEY,
+  user_id INT,
+  token_hash TEXT UNIQUE NOT NULL
+);

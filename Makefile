@@ -1,3 +1,6 @@
+.PHONY: all
+all: lint serve
+
 .PHONY: pginit
 pginit:
 	PGDATA=postgres-data/ pg_ctl init

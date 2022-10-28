@@ -45,8 +45,8 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		} else {
-			fmt.Printf("here = %+v", c)
-			if c.Name == "session" && c.Value == "9azk" {
+			_, err := sessionStore.GetOne(r.Context(), c.Value)
+			if err == nil {
 				loggedIn = true
 			}
 		}

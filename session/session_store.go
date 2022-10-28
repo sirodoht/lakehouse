@@ -2,6 +2,7 @@ package session
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -50,6 +51,9 @@ func (s *SQLStore) GetOne(ctx context.Context, token_hash string) (*Session, err
 	)
 	if err != nil {
 		return nil, err
+	}
+	if len(sessions) == 0 {
+		return nil, fmt.Errorf("no user exists with this username")
 	}
 	return sessions[0], nil
 }

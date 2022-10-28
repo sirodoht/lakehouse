@@ -1,15 +1,27 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
-set -e
-set -x
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
 
-# push origin
-git push origin master
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: ./deploy.sh
 
-# overwrite nginx config
-scp lakehouse.wiki.conf root@lakehouse.wiki:/etc/nginx/sites-available/
+This script deploys the service in the production server.'
+    exit
+fi
 
-# pull and reload on server
-ssh root@lakehouse.wiki 'cd /opt/apps/lakehouse \
-    && git pull \
-    && systemctl reload nginx'
+cd "$(dirname "$0")"
+
+main() {
+    # push origin srht
+    git push -v origin master
+
+    # push on github
+    git push -v github master
+}
+
+main "$@"

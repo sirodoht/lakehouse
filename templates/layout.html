@@ -12,7 +12,8 @@
             | <a href="/login">login</a>
             | <a href="/new/doc">new document</a>
             | <a href="/docs">all docs</a>
-            | {{ . }}
+            | {{ .loggedIn }}
+            | {{ .username }}
         </nav>
         {{template "page" .}}
     </body>

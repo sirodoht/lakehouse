@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html/template"
 	"net/http"
 	"os"
+	"strconv"
 
 	"git.sr.ht/~sirodoht/lakehousewiki/document"
 	"git.sr.ht/~sirodoht/lakehousewiki/session"
@@ -39,6 +41,21 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var username string
+			c, err := r.Cookie("session")
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				username = sessionStore.GetUsername(r.Context(), c.Value)
+			}
+			ctx := context.WithValue(r.Context(), "username", username)
+
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	})
+
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		loggedIn := false
 		c, err := r.Cookie("session")
@@ -56,7 +73,9 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		t.Execute(w, loggedIn)
+		t.Execute(w, map[string]string{
+			"loggedIn": strconv.FormatBool(loggedIn),
+		})
 	})
 
 	// Page Documents

@@ -10,6 +10,7 @@ import (
 type Store interface {
 	Insert(context.Context, *Session) (int64, error)
 	GetOne(context.Context, string) (*Session, error)
+	GetUsername(context.Context, string) string
 }
 
 type SQLStore struct {
@@ -56,4 +57,26 @@ func (s *SQLStore) GetOne(ctx context.Context, token_hash string) (*Session, err
 		return nil, fmt.Errorf("no user exists with this username")
 	}
 	return sessions[0], nil
+}
+
+func (s *SQLStore) GetUsername(ctx context.Context, token_hash string) string {
+	type UserSession struct {
+		Username string
+	}
+	var userSessions []*UserSession
+	err := s.db.SelectContext(
+		ctx,
+		&userSessions,
+		`SELECT users.username
+		FROM sessions JOIN users ON sessions.user_id = users.id
+		WHERE token_hash=$1`,
+		token_hash,
+	)
+	if err != nil {
+		panic(err)
+	}
+	if len(userSessions) == 0 {
+		return ""
+	}
+	return userSessions[0].Username
 }

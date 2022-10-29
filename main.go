@@ -6,7 +6,6 @@ import (
 	"html/template"
 	"net/http"
 	"os"
-	"strconv"
 
 	"git.sr.ht/~sirodoht/lakehousewiki/document"
 	"git.sr.ht/~sirodoht/lakehousewiki/session"
@@ -16,6 +15,12 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+)
+
+type key int
+
+const (
+	keyUsername key = iota
 )
 
 func main() {
@@ -50,21 +55,22 @@ func main() {
 			} else {
 				username = sessionStore.GetUsername(r.Context(), c.Value)
 			}
-			ctx := context.WithValue(r.Context(), "username", username)
+			ctx := context.WithValue(r.Context(), keyUsername, username)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	})
 
+	// midd to check if user is authenticated
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		loggedIn := false
+		isAuthenticated := false
 		c, err := r.Cookie("session")
 		if err != nil {
 			fmt.Println(err)
 		} else {
 			_, err := sessionStore.GetOne(r.Context(), c.Value)
 			if err == nil {
-				loggedIn = true
+				isAuthenticated = true
 			}
 		}
 
@@ -73,8 +79,9 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		t.Execute(w, map[string]string{
-			"loggedIn": strconv.FormatBool(loggedIn),
+		t.Execute(w, map[string]interface{}{
+			"isAuthenticated": isAuthenticated,
+			"username":        r.Context().Value(keyUsername),
 		})
 	})
 

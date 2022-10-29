@@ -100,6 +100,7 @@ func main() {
 	r.Post("/signup", userPage.SaveNew)
 	r.Get("/login", userPage.RenderLogin)
 	r.Post("/login", userPage.CreateSession)
+	r.Post("/logout", userPage.DeleteSession)
 
 	// static files
 	fileServer := http.FileServer(http.Dir("./static/"))

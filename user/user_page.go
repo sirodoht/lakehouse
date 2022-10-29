@@ -44,6 +44,34 @@ func (page *Page) RenderLogin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (page *Page) DeleteSession(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("session")
+	if err != nil {
+		fmt.Println(err)
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
+	token_hash := c.Value
+
+	// delete session
+	err = page.sessionStore.Delete(r.Context(), token_hash)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// delete cookie by setting a new one with same name and max age < 0
+	cookie := http.Cookie{
+		Name:     "session",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+	}
+	http.SetCookie(w, &cookie)
+
+	// redirect to index
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
 func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
 	var data struct {
 		Username string

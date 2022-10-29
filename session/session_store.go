@@ -11,6 +11,7 @@ type Store interface {
 	Insert(context.Context, *Session) (int64, error)
 	GetOne(context.Context, string) (*Session, error)
 	GetUsername(context.Context, string) string
+	Delete(context.Context, string) error
 }
 
 type SQLStore struct {
@@ -79,4 +80,17 @@ func (s *SQLStore) GetUsername(ctx context.Context, token_hash string) string {
 		return ""
 	}
 	return userSessions[0].Username
+}
+
+func (s *SQLStore) Delete(ctx context.Context, token_hash string) error {
+	_, err := s.db.Exec(`
+		DELETE FROM sessions
+		WHERE token_hash = $1`,
+		token_hash,
+	)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
 }

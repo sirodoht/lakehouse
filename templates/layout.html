@@ -12,7 +12,7 @@
             {{if .isAuthenticated}}
             | <a href="/docs">all docs</a>
             | <a href="/new/doc">new document</a>
-            | <form action="/logout" method="post"><input type="submit" value="logout"></form>
+            | <form class="form-inline" action="/logout" method="post"><input type="submit" value="logout"></form>
             | {{ .username }}
             {{else}}
             | <a href="/signup">signup</a>

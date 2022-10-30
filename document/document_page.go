@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"time"
 
+	"git.sr.ht/~sirodoht/lakehousewiki/eliot"
+
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 )
@@ -52,7 +54,12 @@ func (page *Page) RenderOne(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	err = t.Execute(w, doc)
+	err = t.Execute(w, map[string]interface{}{
+		"IsAuthenticated": r.Context().Value(eliot.KeyIsAuthenticated),
+		"Username":        r.Context().Value(eliot.KeyUsername),
+		"Document":        doc,
+	})
+
 	if err != nil {
 		panic(err)
 	}
@@ -77,7 +84,11 @@ func (page *Page) RenderAll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	err = t.Execute(w, docs)
+	err = t.Execute(w, map[string]interface{}{
+		"IsAuthenticated": r.Context().Value(eliot.KeyIsAuthenticated),
+		"Username":        r.Context().Value(eliot.KeyUsername),
+		"DocumentList":    docs,
+	})
 	if err != nil {
 		panic(err)
 	}
@@ -93,7 +104,10 @@ func (page *Page) RenderNew(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	err = t.Execute(w, nil)
+	err = t.Execute(w, map[string]interface{}{
+		"IsAuthenticated": r.Context().Value(eliot.KeyIsAuthenticated),
+		"Username":        r.Context().Value(eliot.KeyUsername),
+	})
 	if err != nil {
 		panic(err)
 	}

@@ -8,19 +8,14 @@ import (
 	"os"
 
 	"git.sr.ht/~sirodoht/lakehousewiki/document"
+	"git.sr.ht/~sirodoht/lakehousewiki/eliot"
 	"git.sr.ht/~sirodoht/lakehousewiki/session"
 	"git.sr.ht/~sirodoht/lakehousewiki/user"
 
-	chi "github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-)
-
-type key int
-
-const (
-	keyUsername key = iota
 )
 
 func main() {
@@ -46,42 +41,36 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 
+	// midd to check if user is authenticated
 	r.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			var username string
+			isAuthenticated := false
 			c, err := r.Cookie("session")
 			if err != nil {
 				fmt.Println(err)
 			} else {
 				username = sessionStore.GetUsername(r.Context(), c.Value)
+				if err == nil {
+					isAuthenticated = true
+				}
 			}
-			ctx := context.WithValue(r.Context(), keyUsername, username)
+			ctx := context.WithValue(r.Context(), eliot.KeyUsername, username)
+			ctx = context.WithValue(ctx, eliot.KeyIsAuthenticated, isAuthenticated)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	})
 
-	// midd to check if user is authenticated
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		isAuthenticated := false
-		c, err := r.Cookie("session")
-		if err != nil {
-			fmt.Println(err)
-		} else {
-			_, err := sessionStore.GetOne(r.Context(), c.Value)
-			if err == nil {
-				isAuthenticated = true
-			}
-		}
-
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		t, err := template.ParseFiles("templates/layout.html", "templates/index.html")
 		if err != nil {
 			panic(err)
 		}
 		t.Execute(w, map[string]interface{}{
-			"isAuthenticated": isAuthenticated,
-			"username":        r.Context().Value(keyUsername),
+			"IsAuthenticated": r.Context().Value(eliot.KeyIsAuthenticated),
+			"Username":        r.Context().Value(eliot.KeyUsername),
 		})
 	})
 

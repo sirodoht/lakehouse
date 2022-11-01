@@ -182,7 +182,6 @@ body {
 @media (max-width: 34rem) {
     html,
     body {
-        /* mobile base font size remains 16px whether zialucia on or off */
         font-size: 16px;
     }
 }
@@ -221,7 +220,6 @@ a.btn:disabled {
     pointer-events: none;
     background: var(--ascent-color);
 }
-
 
 h1 {
     font-size: 1.8rem;
@@ -485,78 +483,17 @@ form .helptext {
     padding-bottom: 8px;
 }
 
-/* docs list */
-.docs a:hover {
-    text-decoration: underline;
-}
-
-.docs a:visited {
-    color: var(--purple-color);
-}
-
-.docs a:active {
-    color: var(--red-color);
-}
-
-.docs {
-    list-style: none;
-    padding-left: 0;
-}
-
-.docs li {
-    margin-bottom: 24px;
-}
-
-.docs small {
-    white-space: nowrap;
-    color: var(--dark-grey-color);
-}
-
-.docs time {
-    white-space: nowrap;
-}
-
-.byline {
-    color: var(--dark-grey-color);
-    margin: 16px 0 24px;
-}
-
-/* doc detail */
-.docs-item-brand {
-    display: block;
-    margin-top: 16px;
-    margin-bottom: 16px;
-    color: var(--dark-grey-color);
-}
-
-.docs-item-brand:hover {
-    text-decoration: none;
-}
-
-.docs-item-brand::before {
-    content: "« ";
-}
-
-.docs-item-title {
+/* document single */
+.doc-title {
     margin-bottom: 8px;
 }
 
-.docs-item-byline {
+.doc-tools {
     color: var(--dark-grey-color);
     margin-bottom: 8px;
 }
 
-.docs-item-body p {
-    font-family: serif;
-    font-size: 1.1rem;
-}
-
-.docs-item-body li {
-    font-family: serif;
-    font-size: 1.1rem;
-}
-
-.docs-item-body img {
+.doc-body img {
     max-width: 100%;
     display: block;
     margin-left: auto;

@@ -9,7 +9,6 @@ linters-settings:
 linters:
   disable-all: true
   enable:
-    - deadcode
     - depguard
     - errcheck
     - gochecknoinits
@@ -28,7 +27,6 @@ linters:
     - typecheck
     - unconvert
     - unused
-    - varcheck
     - whitespace
 
 issues:
@@ -44,7 +42,7 @@ issues:
       text: "returns unexported type"
 
 run:
-  go: "1.18"
+  go: "1.19"
   timeout: 2m
   allow-parallel-runners: true
   modules-download-mode: readonly

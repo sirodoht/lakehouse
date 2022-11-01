@@ -1,3 +1,1 @@
 export DATABASE_URL=postgres://lakehouse:@localhost:5432/lakehouse?sslmode=disable
-
-use nix

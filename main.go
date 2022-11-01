@@ -20,6 +20,10 @@ import (
 )
 
 func main() {
+	// debug mode
+	debugMode := os.Getenv("DEBUG")
+
+	// database connection
 	databaseURL := os.Getenv("DATABASE_URL")
 	db, err := sqlx.Connect("postgres", databaseURL)
 	if err != nil {
@@ -105,8 +109,10 @@ func main() {
 	r.Post("/logout", userPage.DeleteSession)
 
 	// static files
-	fileServer := http.FileServer(http.Dir("./static/"))
-	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
+	if debugMode == "1" {
+		fileServer := http.FileServer(http.Dir("./static/"))
+		r.Handle("/static/*", http.StripPrefix("/static", fileServer))
+	}
 
 	// serve
 	fmt.Println("Listening on http://127.0.0.1:8000/")

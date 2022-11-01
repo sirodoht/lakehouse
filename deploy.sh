@@ -17,6 +17,9 @@ fi
 cd "$(dirname "$0")"
 
 main() {
+    # make sure linting checks pass
+    make lint
+
     # push origin srht
     git push -v origin master
 

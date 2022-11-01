@@ -12,6 +12,8 @@ import (
 	"git.sr.ht/~sirodoht/lakehousewiki/eliot"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/russross/blackfriday/v2"
 	"go.uber.org/zap"
 )
 
@@ -27,6 +29,7 @@ func NewPage(store Store) *Page {
 }
 
 func (page *Page) RenderOne(w http.ResponseWriter, r *http.Request) {
+	// parse url doc id
 	id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
 		page.logger.With(
@@ -36,6 +39,7 @@ func (page *Page) RenderOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get document from database
 	doc, err := page.store.GetOne(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -49,6 +53,11 @@ func (page *Page) RenderOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// compile markdown to html
+	unsafeHTML := blackfriday.Run([]byte(doc.Body))
+	bodyHTML := bluemonday.UGCPolicy().SanitizeBytes(unsafeHTML)
+
+	// respond
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
 		"templates/layout.html",
@@ -61,8 +70,8 @@ func (page *Page) RenderOne(w http.ResponseWriter, r *http.Request) {
 		"IsAuthenticated": r.Context().Value(eliot.KeyIsAuthenticated),
 		"Username":        r.Context().Value(eliot.KeyUsername),
 		"Document":        doc,
+		"BodyHTML":        template.HTML(bodyHTML),
 	})
-
 	if err != nil {
 		panic(err)
 	}

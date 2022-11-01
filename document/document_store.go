@@ -57,7 +57,13 @@ func (s *SQLStore) Update(
 	field string,
 	value string,
 ) error {
-	sql := fmt.Sprintf("UPDATE documents SET %s=:value WHERE id=:id", field)
+	sql := fmt.Sprintf(`
+		UPDATE documents
+		SET
+			%s=:value,
+			updated_at=now()
+		WHERE id=:id
+	`, field)
 	_, err := s.db.NamedExec(sql, map[string]interface{}{
 		"field": field,
 		"value": value,

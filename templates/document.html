@@ -1,7 +1,10 @@
 {{define "page"}}
-<main>
-    <h1>{{.Document.Title}}</h1>
-    <div>
+<main class="doc">
+    <h1 class="doc-title">{{.Document.Title}}</h1>
+    <div class="doc-tools">
+        [ <a href="/docs/{{.Document.ID}}/edit">edit</a> ]
+    </div>
+    <div class="doc-body">
         {{.Document.Body}}
     </div>
 </main>

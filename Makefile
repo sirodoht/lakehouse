@@ -13,3 +13,7 @@ format:
 .PHONY: serve
 serve:
 	CGO_ENABLED=0 modd
+
+.PHONY: test
+test:
+	go test -v ./...

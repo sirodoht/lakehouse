@@ -40,6 +40,9 @@ issues:
     - linters:
         - revive
       text: "returns unexported type"
+    - linters:
+        - gosec
+      text: "G203:"
 
 run:
   go: "1.19"

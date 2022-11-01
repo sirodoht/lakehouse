@@ -20,6 +20,9 @@ main() {
     # make sure linting checks pass
     make lint
 
+    # make sure tests pass
+    go test -v ./...
+
     # push origin srht
     git push -v origin master
 

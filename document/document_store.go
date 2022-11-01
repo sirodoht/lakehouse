@@ -80,7 +80,7 @@ func (s *SQLStore) GetAll(ctx context.Context) ([]*Document, error) {
 	err := s.db.SelectContext(
 		ctx,
 		&docs,
-		`SELECT * FROM documents ORDER BY id ASC`,
+		`SELECT * FROM documents ORDER BY title ASC`,
 	)
 	if err != nil {
 		return nil, err

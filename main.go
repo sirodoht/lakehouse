@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"time"
 
 	"git.sr.ht/~sirodoht/lakehousewiki/document"
 	"git.sr.ht/~sirodoht/lakehousewiki/eliot"
@@ -19,8 +20,8 @@ import (
 )
 
 func main() {
-	databaseUrl := os.Getenv("DATABASE_URL")
-	db, err := sqlx.Connect("postgres", databaseUrl)
+	databaseURL := os.Getenv("DATABASE_URL")
+	db, err := sqlx.Connect("postgres", databaseURL)
 	if err != nil {
 		panic(err)
 	}
@@ -31,8 +32,8 @@ func main() {
 	sessionStore := session.NewSQLStore(db)
 
 	// instantiate APIs
-	documentApi := document.NewAPI(documentStore)
-	userApi := user.NewAPI(userStore)
+	documentAPI := document.NewAPI(documentStore)
+	userAPI := user.NewAPI(userStore)
 
 	// instantiate Pages
 	userPage := user.NewPage(userStore, sessionStore)
@@ -68,10 +69,13 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		t.Execute(w, map[string]interface{}{
+		err = t.Execute(w, map[string]interface{}{
 			"IsAuthenticated": r.Context().Value(eliot.KeyIsAuthenticated),
 			"Username":        r.Context().Value(eliot.KeyUsername),
 		})
+		if err != nil {
+			panic(err)
+		}
 	})
 
 	// Page Documents
@@ -81,15 +85,15 @@ func main() {
 	r.Get("/docs/{id}", documentPage.RenderOne)
 
 	// API Documents
-	r.Post("/api/docs", documentApi.InsertHandler)
-	r.Get("/api/docs", documentApi.GetAllHandler)
-	r.Patch("/api/docs/{id}", documentApi.UpdateHandler)
-	r.Get("/api/docs/{id}", documentApi.GetOneHandler)
+	r.Post("/api/docs", documentAPI.InsertHandler)
+	r.Get("/api/docs", documentAPI.GetAllHandler)
+	r.Patch("/api/docs/{id}", documentAPI.UpdateHandler)
+	r.Get("/api/docs/{id}", documentAPI.GetOneHandler)
 
 	// API Users
-	r.Post("/api/users", userApi.InsertHandler)
-	r.Get("/api/users/{id}", userApi.GetOneHandler)
-	r.Patch("/api/users/{id}", userApi.UpdateHandler)
+	r.Post("/api/users", userAPI.InsertHandler)
+	r.Get("/api/users/{id}", userAPI.GetOneHandler)
+	r.Patch("/api/users/{id}", userAPI.UpdateHandler)
 
 	// Page Users
 	r.Get("/signup", userPage.RenderNew)
@@ -104,5 +108,14 @@ func main() {
 
 	// serve
 	fmt.Println("Listening on http://127.0.0.1:8000/")
-	http.ListenAndServe(":8000", r)
+	srv := &http.Server{
+		Handler:      r,
+		Addr:         ":8000",
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	err = srv.ListenAndServe()
+	if err != nil {
+		panic(err)
+	}
 }

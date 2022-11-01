@@ -44,12 +44,20 @@ func (s *SQLStore) Insert(ctx context.Context, d *User) (int64, error) {
 		return 0, err
 	}
 	if rows.Next() {
-		rows.Scan(&id)
+		err = rows.Scan(&id)
+		if err != nil {
+			panic(err)
+		}
 	}
 	return id, nil
 }
 
-func (s *SQLStore) InsertPage(ctx context.Context, username string, email string, passwordHash string) (int64, error) {
+func (s *SQLStore) InsertPage(
+	ctx context.Context,
+	username string,
+	email string,
+	passwordHash string,
+) (int64, error) {
 	var id int64
 	timenow := time.Now()
 	row := s.db.QueryRow(`
@@ -79,7 +87,12 @@ func (s *SQLStore) InsertPage(ctx context.Context, username string, email string
 	return id, nil
 }
 
-func (s *SQLStore) Update(ctx context.Context, id int64, field string, value string) error {
+func (s *SQLStore) Update(
+	ctx context.Context,
+	id int64,
+	field string,
+	value string,
+) error {
 	sql := fmt.Sprintf("UPDATE users SET %s=:value WHERE id=:id", field)
 	_, err := s.db.NamedExec(sql, map[string]interface{}{
 		"field": field,
@@ -106,7 +119,10 @@ func (s *SQLStore) GetOne(ctx context.Context, id int64) (*User, error) {
 	return users[0], nil
 }
 
-func (s *SQLStore) GetOneByUsername(ctx context.Context, username string) (*User, error) {
+func (s *SQLStore) GetOneByUsername(
+	ctx context.Context,
+	username string,
+) (*User, error) {
 	var users []*User
 	err := s.db.SelectContext(
 		ctx,
@@ -118,7 +134,7 @@ func (s *SQLStore) GetOneByUsername(ctx context.Context, username string) (*User
 		panic(err)
 	}
 	if len(users) == 0 {
-		return nil, fmt.Errorf("No user exists with this username.")
+		return nil, fmt.Errorf("no user exists with this username")
 	}
 	return users[0], nil
 }

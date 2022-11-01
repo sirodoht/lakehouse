@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"time"
@@ -64,7 +64,7 @@ func (api *API) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := ioutil.ReadAll(r.Body)
+	b, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
 		http.Error(w, err.Error(), 500)
@@ -72,8 +72,8 @@ func (api *API) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type ReqBody struct {
-		Username *string "json:username"
-		Email    *string "json:email"
+		Username *string `json:"username"`
+		Email    *string `json:"email"`
 	}
 	var rb ReqBody
 	err = json.Unmarshal(b, &rb)
@@ -85,10 +85,16 @@ func (api *API) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if rb.Username != nil {
-		api.store.Update(r.Context(), id, "username", *rb.Username)
+		err = api.store.Update(r.Context(), id, "username", *rb.Username)
+		if err != nil {
+			panic(err)
+		}
 	}
 	if rb.Email != nil {
-		api.store.Update(r.Context(), id, "email", *rb.Email)
+		err = api.store.Update(r.Context(), id, "email", *rb.Email)
+		if err != nil {
+			panic(err)
+		}
 	}
 	w.WriteHeader(http.StatusOK)
 }
@@ -117,6 +123,10 @@ func (api *API) GetOneHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	res, err := json.MarshalIndent(user, "", "  ")
 	if err != nil {
+		panic(err)
 	}
-	w.Write(res)
+	_, err = w.Write(res)
+	if err != nil {
+		panic(err)
+	}
 }

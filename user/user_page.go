@@ -1,11 +1,11 @@
 package user
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
 	"html/template"
-	"math/rand"
 	"net/http"
 	"strings"
 
@@ -50,10 +50,10 @@ func (page *Page) DeleteSession(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		http.Redirect(w, r, "/", http.StatusFound)
 	}
-	token_hash := c.Value
+	tokenHash := c.Value
 
 	// delete session
-	err = page.sessionStore.Delete(r.Context(), token_hash)
+	err = page.sessionStore.Delete(r.Context(), tokenHash)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -89,8 +89,15 @@ func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("Checking password=%+v and hash=%+v", data.Password, user.PasswordHash)
-	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(data.Password))
+	fmt.Printf(
+		"Checking password=%+v and hash=%+v",
+		data.Password,
+		user.PasswordHash,
+	)
+	err = bcrypt.CompareHashAndPassword(
+		[]byte(user.PasswordHash),
+		[]byte(data.Password),
+	)
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Something went wrong.", http.StatusInternalServerError)

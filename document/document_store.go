@@ -43,12 +43,20 @@ func (s *SQLStore) Insert(ctx context.Context, d *Document) (int64, error) {
 		return 0, err
 	}
 	if rows.Next() {
-		rows.Scan(&id)
+		err = rows.Scan(&id)
+		if err != nil {
+			panic(err)
+		}
 	}
 	return id, nil
 }
 
-func (s *SQLStore) Update(ctx context.Context, id int64, field string, value string) error {
+func (s *SQLStore) Update(
+	ctx context.Context,
+	id int64,
+	field string,
+	value string,
+) error {
 	sql := fmt.Sprintf("UPDATE documents SET %s=:value WHERE id=:id", field)
 	_, err := s.db.NamedExec(sql, map[string]interface{}{
 		"field": field,

@@ -38,18 +38,24 @@ func (s *SQLStore) Insert(ctx context.Context, d *Session) (int64, error) {
 		return 0, err
 	}
 	if rows.Next() {
-		rows.Scan(&id)
+		err = rows.Scan(&id)
+		if err != nil {
+			panic(err)
+		}
 	}
 	return id, nil
 }
 
-func (s *SQLStore) GetOne(ctx context.Context, token_hash string) (*Session, error) {
+func (s *SQLStore) GetOne(ctx context.Context, tokenHash string) (
+	*Session,
+	error,
+) {
 	var sessions []*Session
 	err := s.db.SelectContext(
 		ctx,
 		&sessions,
 		`SELECT * FROM sessions WHERE token_hash=$1`,
-		token_hash,
+		tokenHash,
 	)
 	if err != nil {
 		return nil, err
@@ -60,7 +66,7 @@ func (s *SQLStore) GetOne(ctx context.Context, token_hash string) (*Session, err
 	return sessions[0], nil
 }
 
-func (s *SQLStore) GetUsername(ctx context.Context, token_hash string) string {
+func (s *SQLStore) GetUsername(ctx context.Context, tokenHash string) string {
 	type UserSession struct {
 		Username string
 	}
@@ -71,7 +77,7 @@ func (s *SQLStore) GetUsername(ctx context.Context, token_hash string) string {
 		`SELECT users.username
 		FROM sessions JOIN users ON sessions.user_id = users.id
 		WHERE token_hash=$1`,
-		token_hash,
+		tokenHash,
 	)
 	if err != nil {
 		panic(err)
@@ -82,11 +88,11 @@ func (s *SQLStore) GetUsername(ctx context.Context, token_hash string) string {
 	return userSessions[0].Username
 }
 
-func (s *SQLStore) Delete(ctx context.Context, token_hash string) error {
+func (s *SQLStore) Delete(ctx context.Context, tokenHash string) error {
 	_, err := s.db.Exec(`
 		DELETE FROM sessions
 		WHERE token_hash = $1`,
-		token_hash,
+		tokenHash,
 	)
 	if err != nil {
 		fmt.Println(err)

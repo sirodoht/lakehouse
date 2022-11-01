@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"time"
@@ -65,7 +65,7 @@ func (api *API) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := ioutil.ReadAll(r.Body)
+	b, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
 		http.Error(w, err.Error(), 500)
@@ -73,8 +73,8 @@ func (api *API) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type ReqBody struct {
-		Title *string "json:title"
-		Body  *string "json:body"
+		Title *string `json:"title"`
+		Body  *string `json:"body"`
 	}
 	var rb ReqBody
 	err = json.Unmarshal(b, &rb)
@@ -86,10 +86,16 @@ func (api *API) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if rb.Title != nil {
-		api.store.Update(r.Context(), id, "title", *rb.Title)
+		err = api.store.Update(r.Context(), id, "title", *rb.Title)
+		if err != nil {
+			panic(err)
+		}
 	}
 	if rb.Body != nil {
-		api.store.Update(r.Context(), id, "body", *rb.Body)
+		err = api.store.Update(r.Context(), id, "body", *rb.Body)
+		if err != nil {
+			panic(err)
+		}
 	}
 	w.WriteHeader(http.StatusOK)
 }
@@ -109,8 +115,12 @@ func (api *API) GetAllHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	res, err := json.MarshalIndent(docs, "", "  ")
 	if err != nil {
+		panic(err)
 	}
-	w.Write(res)
+	_, err = w.Write(res)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (api *API) GetOneHandler(w http.ResponseWriter, r *http.Request) {
@@ -137,6 +147,10 @@ func (api *API) GetOneHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	res, err := json.MarshalIndent(doc, "", "  ")
 	if err != nil {
+		panic(err)
 	}
-	w.Write(res)
+	_, err = w.Write(res)
+	if err != nil {
+		panic(err)
+	}
 }

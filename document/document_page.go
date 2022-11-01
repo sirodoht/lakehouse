@@ -50,7 +50,10 @@ func (page *Page) RenderOne(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.ParseFiles("templates/layout.html", "templates/document.html")
+	t, err := template.ParseFiles(
+		"templates/layout.html",
+		"templates/document.html",
+	)
 	if err != nil {
 		panic(err)
 	}
@@ -80,7 +83,10 @@ func (page *Page) RenderAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.ParseFiles("templates/layout.html", "templates/document_list.html")
+	t, err := template.ParseFiles(
+		"templates/layout.html",
+		"templates/document_list.html",
+	)
 	if err != nil {
 		panic(err)
 	}
@@ -96,7 +102,10 @@ func (page *Page) RenderAll(w http.ResponseWriter, r *http.Request) {
 
 func (page *Page) RenderNew(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.ParseFiles("templates/layout.html", "templates/document_new.html")
+	t, err := template.ParseFiles(
+		"templates/layout.html",
+		"templates/document_new.html",
+	)
 	if err != nil {
 		page.logger.With(
 			zap.Error(err),

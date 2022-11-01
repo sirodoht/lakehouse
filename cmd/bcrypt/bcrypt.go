@@ -19,7 +19,10 @@ func main() {
 }
 
 func hash(password string) {
-	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	hashedBytes, err := bcrypt.GenerateFromPassword(
+		[]byte(password),
+		bcrypt.DefaultCost,
+	)
 	if err != nil {
 		fmt.Printf("error hashing: %v\n", err)
 		return

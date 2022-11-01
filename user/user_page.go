@@ -79,21 +79,14 @@ func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
 	}
 	data.Username = r.FormValue("username")
 	data.Password = r.FormValue("password")
-	fmt.Printf("%+v", data)
 
 	user, err := page.store.GetOneByUsername(r.Context(), data.Username)
-	fmt.Printf("%+v", user)
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Something went wrong.", http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Printf(
-		"Checking password=%+v and hash=%+v",
-		data.Password,
-		user.PasswordHash,
-	)
 	err = bcrypt.CompareHashAndPassword(
 		[]byte(user.PasswordHash),
 		[]byte(data.Password),

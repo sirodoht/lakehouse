@@ -154,5 +154,93 @@ func (page *Page) SaveNew(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	http.Redirect(w, r, "/docs", http.StatusSeeOther)
+	http.Redirect(w, r, "/docs", http.StatusFound)
+}
+
+func (page *Page) RenderEdit(w http.ResponseWriter, r *http.Request) {
+	// parse url doc id
+	id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+	if err != nil {
+		page.logger.With(
+			zap.Error(err),
+		).Error("invalid id")
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	// get doc based on url id
+	doc, err := page.store.GetOne(r.Context(), id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		page.logger.With(
+			zap.Error(err),
+		).Error("failed to get document")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	// render
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	t, err := template.ParseFiles(
+		"templates/layout.html",
+		"templates/document_edit.html",
+	)
+	if err != nil {
+		page.logger.With(
+			zap.Error(err),
+		).Error("cannot compile doc edit template")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	err = t.Execute(w, map[string]interface{}{
+		"IsAuthenticated": r.Context().Value(eliot.KeyIsAuthenticated),
+		"Username":        r.Context().Value(eliot.KeyUsername),
+		"Document":        doc,
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (page *Page) SaveEdit(w http.ResponseWriter, r *http.Request) {
+	// parse doc id from url
+	idAsString := chi.URLParam(r, "id")
+	id, err := strconv.ParseInt(idAsString, 10, 64)
+	if err != nil {
+		page.logger.With(
+			zap.Error(err),
+		).Error("invalid id")
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	// gather post form data
+	var data struct {
+		Title string
+		Body  string
+	}
+	data.Title = r.FormValue("title")
+	data.Body = r.FormValue("body")
+
+	// validate data
+	if data.Title == "" || data.Body == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// write updated doc on database
+	err = page.store.Update(r.Context(), id, "title", data.Title)
+	if err != nil {
+		panic(err)
+	}
+	err = page.store.Update(r.Context(), id, "body", data.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	// respond
+	http.Redirect(w, r, "/docs/"+idAsString, http.StatusFound)
 }

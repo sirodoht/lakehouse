@@ -83,6 +83,8 @@ func main() {
 	r.Get("/new/doc", documentPage.RenderNew)
 	r.Post("/new/doc", documentPage.SaveNew)
 	r.Get("/docs/{id}", documentPage.RenderOne)
+	r.Get("/docs/{id}/edit", documentPage.RenderEdit)
+	r.Post("/docs/{id}/edit", documentPage.SaveEdit)
 
 	// API Documents
 	r.Post("/api/docs", documentAPI.InsertHandler)

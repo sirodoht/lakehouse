@@ -10,6 +10,7 @@
         <nav>
             <a href="/">home</a>
             {{if .IsAuthenticated}}
+            | <a href="/dashboard">dashboard</a>
             | <a href="/docs">all docs</a>
             | <a href="/new/doc">new document</a>
             | <form class="form-inline" action="/logout" method="post"><input type="submit" value="logout"></form>

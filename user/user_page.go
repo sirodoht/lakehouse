@@ -28,6 +28,22 @@ func NewPage(store Store, sessionStore session.Store) *Page {
 	}
 }
 
+func (page *Page) RenderDashboard(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	t, err := template.ParseFiles("templates/layout.html", "templates/dashboard.html")
+	if err != nil {
+		page.logger.With(
+			zap.Error(err),
+		).Error("cannot compile dashboard template")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	err = t.Execute(w, nil)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (page *Page) RenderLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles("templates/layout.html", "templates/login.html")

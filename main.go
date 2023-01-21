@@ -108,6 +108,9 @@ func main() {
 	r.Post("/login", userPage.CreateSession)
 	r.Post("/logout", userPage.DeleteSession)
 
+	// dashboard
+	r.Get("/dashboard", userPage.RenderDashboard)
+
 	// static files
 	if debugMode == "1" {
 		fileServer := http.FileServer(http.Dir("./static/"))

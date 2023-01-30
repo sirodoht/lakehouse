@@ -21,7 +21,7 @@ main() {
     make lint
 
     # make sure tests pass
-    go test -v ./...
+    make test
 
     # push origin srht
     git push -v origin master

@@ -1,15 +1,15 @@
-import { Editor } from '@tiptap/core'
-import StarterKit from '@tiptap/starter-kit'
-import Collaboration from '@tiptap/extension-collaboration'
-import { HocuspocusProvider } from '@hocuspocus/provider'
+import { Editor } from "@tiptap/core";
+import StarterKit from "@tiptap/starter-kit";
+import Collaboration from "@tiptap/extension-collaboration";
+import { HocuspocusProvider } from "@hocuspocus/provider";
 
 // Set up the Hocuspocus WebSocket provider
 const provider = new HocuspocusProvider({
-  url: 'ws://127.0.0.1:8001',
-  name: 'example-document',
-})
+  url: "ws://127.0.0.1:8001",
+  name: "example-document",
+});
 
-const editor = new Editor({
+new Editor({
   element: document.querySelector(".element"),
   content: "<p>Hello World!</p>",
   extensions: [
@@ -22,4 +22,4 @@ const editor = new Editor({
       document: provider.document,
     }),
   ],
-})
+});

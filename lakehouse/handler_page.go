@@ -1,4 +1,4 @@
-package lakehousewiki
+package lakehouse
 
 import (
 	"crypto/rand"
@@ -34,7 +34,7 @@ func NewHandlerPage(store *SQLStore) *Page {
 
 func (page *Page) RenderDashboard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.ParseFiles("templates/layout.html", "templates/dashboard.html")
+	t, err := template.ParseFiles("lakehouse/templates/layout.html", "lakehouse/templates/dashboard.html")
 	if err != nil {
 		page.logger.With(
 			zap.Error(err),
@@ -50,7 +50,7 @@ func (page *Page) RenderDashboard(w http.ResponseWriter, r *http.Request) {
 
 func (page *Page) RenderLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.ParseFiles("templates/layout.html", "templates/login.html")
+	t, err := template.ParseFiles("lakehouse/templates/layout.html", "lakehouse/templates/login.html")
 	if err != nil {
 		page.logger.With(
 			zap.Error(err),
@@ -152,7 +152,7 @@ func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
 
 func (page *Page) RenderNewUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.ParseFiles("templates/layout.html", "templates/signup.html")
+	t, err := template.ParseFiles("lakehouse/templates/layout.html", "lakehouse/templates/signup.html")
 	if err != nil {
 		page.logger.With(
 			zap.Error(err),
@@ -238,8 +238,8 @@ func (page *Page) RenderOneDocument(w http.ResponseWriter, r *http.Request) {
 	// respond
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"templates/layout.html",
-		"templates/document.html",
+		"lakehouse/templates/layout.html",
+		"lakehouse/templates/document.html",
 	)
 	if err != nil {
 		panic(err)
@@ -271,8 +271,8 @@ func (page *Page) RenderAllDocument(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"templates/layout.html",
-		"templates/document_list.html",
+		"lakehouse/templates/layout.html",
+		"lakehouse/templates/document_list.html",
 	)
 	if err != nil {
 		panic(err)
@@ -290,8 +290,8 @@ func (page *Page) RenderAllDocument(w http.ResponseWriter, r *http.Request) {
 func (page *Page) RenderNewDocument(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"templates/layout.html",
-		"templates/document_new.html",
+		"lakehouse/templates/layout.html",
+		"lakehouse/templates/document_new.html",
 	)
 	if err != nil {
 		page.logger.With(
@@ -372,8 +372,8 @@ func (page *Page) RenderEditDocument(w http.ResponseWriter, r *http.Request) {
 	// render
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"templates/layout.html",
-		"templates/document_edit.html",
+		"lakehouse/templates/layout.html",
+		"lakehouse/templates/document_edit.html",
 	)
 	if err != nil {
 		page.logger.With(

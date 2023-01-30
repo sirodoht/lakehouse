@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"git.sr.ht/~sirodoht/lakehousewiki"
+	"git.sr.ht/~sirodoht/lakehousewiki/lakehouse"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -28,9 +28,9 @@ func main() {
 	}
 
 	// instantiate
-	store := lakehousewiki.NewSQLStore(db)
-	handlerAPI := lakehousewiki.NewHandlerAPI(store)
-	handlerPage := lakehousewiki.NewHandlerPage(store)
+	store := lakehouse.NewSQLStore(db)
+	handlerAPI := lakehouse.NewHandlerAPI(store)
+	handlerPage := lakehouse.NewHandlerPage(store)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -49,8 +49,8 @@ func main() {
 					isAuthenticated = true
 				}
 			}
-			ctx := context.WithValue(r.Context(), lakehousewiki.KeyUsername, username)
-			ctx = context.WithValue(ctx, lakehousewiki.KeyIsAuthenticated, isAuthenticated)
+			ctx := context.WithValue(r.Context(), lakehouse.KeyUsername, username)
+			ctx = context.WithValue(ctx, lakehouse.KeyIsAuthenticated, isAuthenticated)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
@@ -58,13 +58,13 @@ func main() {
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		t, err := template.ParseFiles("templates/layout.html", "templates/index.html")
+		t, err := template.ParseFiles("lakehouse/templates/layout.html", "lakehouse/templates/index.html")
 		if err != nil {
 			panic(err)
 		}
 		err = t.Execute(w, map[string]interface{}{
-			"IsAuthenticated": r.Context().Value(lakehousewiki.KeyIsAuthenticated),
-			"Username":        r.Context().Value(lakehousewiki.KeyUsername),
+			"IsAuthenticated": r.Context().Value(lakehouse.KeyIsAuthenticated),
+			"Username":        r.Context().Value(lakehouse.KeyUsername),
 		})
 		if err != nil {
 			panic(err)

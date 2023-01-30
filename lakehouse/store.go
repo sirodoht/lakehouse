@@ -1,4 +1,4 @@
-package lakehousewiki
+package lakehouse
 
 import (
 	"context"

@@ -1,7 +1,7 @@
 lakehousewiki.com:443 {
 	route {
 		file_server /static/* {
-			root /home/lake/lakehousewiki
+			root /var/www/lakehousewiki
 		}
 		reverse_proxy 127.0.0.1:8000
 	}
@@ -11,12 +11,4 @@ lakehousewiki.com:443 {
 	}
 
 	encode zstd gzip
-
-	log {
-		output file /var/log/caddy-lakehousewiki.log {
-			roll_size 1gb
-			roll_keep 1
-			roll_keep_for 720h
-		}
-	}
 }

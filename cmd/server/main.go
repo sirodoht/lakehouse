@@ -99,6 +99,7 @@ func main() {
 
 	// dashboard
 	r.Get("/dashboard", handlerPage.RenderDashboard)
+	r.Get("/editor", handlerPage.RenderEditor)
 
 	// static files
 	if debugMode == "1" {

@@ -42,7 +42,10 @@ func (page *Page) RenderDashboard(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	err = t.Execute(w, nil)
+	err = t.Execute(w, map[string]interface{}{
+		"IsAuthenticated": r.Context().Value(KeyIsAuthenticated),
+		"Username":        r.Context().Value(KeyUsername),
+	})
 	if err != nil {
 		panic(err)
 	}
@@ -430,4 +433,23 @@ func (page *Page) SaveEditDocument(w http.ResponseWriter, r *http.Request) {
 
 	// respond
 	http.Redirect(w, r, "/docs/"+idAsString, http.StatusFound)
+}
+
+func (page *Page) RenderEditor(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	t, err := template.ParseFiles("lakehouse/templates/layout.html", "lakehouse/templates/editor.html")
+	if err != nil {
+		page.logger.With(
+			zap.Error(err),
+		).Error("cannot compile dashboard template")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	err = t.Execute(w, map[string]interface{}{
+		"IsAuthenticated": r.Context().Value(KeyIsAuthenticated),
+		"Username":        r.Context().Value(KeyUsername),
+	})
+	if err != nil {
+		panic(err)
+	}
 }

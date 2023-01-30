@@ -2,7 +2,13 @@
 .envrc
 
 # build
-lakehousewiki
+/lakehousewiki
 
 # database
-postgres-data/
+/postgresql/postgres-data/
+
+# dependencies
+node_modules/
+
+# generated
+/static/bundle.js

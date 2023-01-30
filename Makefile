@@ -3,25 +3,25 @@ all: lint serve
 
 .PHONY: lint
 lint:
-	$(info Running Go linters)
-	@GOGC=off golangci-lint run
+	GOGC=off golangci-lint run
+	cd websocket-server && npm run lint
+	cd editor && npm run lint
 
 .PHONY: format
 format:
-	$(info Running go fmt)
 	go fmt ./...
+	cd websocket-server && npm run format
+	cd editor && npm run format
 
 .PHONY: serve
 serve:
-	$(info Watch files and run server)
 	CGO_ENABLED=0 modd
 
 .PHONY: build
 build:
-	$(info Running go build)
-	go build -v ./...
+	go build -v -o lakehousewiki ./cmd/server/main.go
+	cd editor && npm run build
 
 .PHONY: test
 test:
-	$(info Running go test)
 	go test -v ./...

@@ -131,7 +131,10 @@ func (s *SQLStore) GetOneUserByUsername(
 	return users[0], nil
 }
 
-func (s *SQLStore) InsertDocument(ctx context.Context, d *Document) (int64, error) {
+func (s *SQLStore) InsertDocument(
+	ctx context.Context,
+	d *Document,
+) (int64, error) {
 	var id int64
 	rows, err := s.db.NamedQuery(`
 		INSERT INTO documents (
@@ -194,7 +197,10 @@ func (s *SQLStore) GetAllDocument(ctx context.Context) ([]*Document, error) {
 	return docs, nil
 }
 
-func (s *SQLStore) GetOneDocument(ctx context.Context, id int64) (*Document, error) {
+func (s *SQLStore) GetOneDocument(
+	ctx context.Context,
+	id int64,
+) (*Document, error) {
 	var docs []*Document
 	err := s.db.SelectContext(
 		ctx,
@@ -208,7 +214,10 @@ func (s *SQLStore) GetOneDocument(ctx context.Context, id int64) (*Document, err
 	return docs[0], nil
 }
 
-func (s *SQLStore) InsertSession(ctx context.Context, d *Session) (int64, error) {
+func (s *SQLStore) InsertSession(
+	ctx context.Context,
+	d *Session,
+) (int64, error) {
 	var id int64
 	rows, err := s.db.NamedQuery(`
 		INSERT INTO sessions (
@@ -250,7 +259,10 @@ func (s *SQLStore) GetOneSession(ctx context.Context, tokenHash string) (
 	return sessions[0], nil
 }
 
-func (s *SQLStore) GetUsernameSession(ctx context.Context, tokenHash string) string {
+func (s *SQLStore) GetUsernameSession(
+	ctx context.Context,
+	tokenHash string,
+) string {
 	type UserSession struct {
 		Username string
 	}

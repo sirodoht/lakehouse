@@ -58,7 +58,10 @@ func main() {
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		t, err := template.ParseFiles("lakehouse/templates/layout.html", "lakehouse/templates/index.html")
+		t, err := template.ParseFiles(
+			"lakehouse/templates/layout.html",
+			"lakehouse/templates/index.html",
+		)
 		if err != nil {
 			panic(err)
 		}

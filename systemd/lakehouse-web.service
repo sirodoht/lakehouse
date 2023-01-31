@@ -1,0 +1,21 @@
+[Unit]
+Description=lakehouse-web
+After=network.target
+
+[Service]
+Type=simple
+
+WorkingDirectory=/var/www/lakehousewiki
+ExecStart=/bin/bash -lc 'exec /var/www/lakehousewiki/lakehousewiki'
+
+User=deploy
+Group=deploy
+
+Environment="DEBUG=1"
+Environment="DATABASE_URL=postgres://lakehouse:xxx@localhost:5432/lakehouse?sslmode=disable"
+
+TimeoutSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

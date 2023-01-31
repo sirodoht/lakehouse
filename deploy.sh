@@ -32,8 +32,8 @@ main() {
     # pull on server and reload
     ssh deploy@5.75.194.9 'cd /var/www/lakehousewiki ' \
         '&& git pull ' \
-        '&& make build ' \
-        '&& sudo systemctl restart gicast2.service'
+        '&& source ~/.profile && make build ' \
+        '&& sudo systemctl restart lakehouse-web.service'
 }
 
 main "$@"

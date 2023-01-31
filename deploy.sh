@@ -28,6 +28,12 @@ main() {
 
     # push on github
     git push -v github master
+
+    # pull on server and reload
+    ssh deploy@5.75.194.9 'cd /var/www/lakehousewiki ' \
+        '&& git pull ' \
+        '&& make build ' \
+        '&& sudo systemctl restart gicast2.service'
 }
 
 main "$@"

@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 
-WorkingDirectory=/var/www/lakehousewiki
-ExecStart=/bin/bash -lc 'exec /var/www/lakehousewiki/lakehousewiki'
+WorkingDirectory=/var/www/lakehouse
+ExecStart=/bin/bash -lc 'exec /var/www/lakehouse/lakehouse'
 
 User=deploy
 Group=deploy

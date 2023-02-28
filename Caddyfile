@@ -1,7 +1,7 @@
-lakehousewiki.com:443 {
+lakehousedocs.com:443 {
 	route {
 		file_server /static/* {
-			root /var/www/lakehousewiki
+			root /var/www/lakehouse
 		}
 		reverse_proxy 127.0.0.1:8000
 	}

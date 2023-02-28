@@ -1,4 +1,4 @@
-module git.sr.ht/~sirodoht/lakehousewiki
+module git.sr.ht/~sirodoht/lakehouse
 
 go 1.19
 

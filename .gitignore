@@ -2,7 +2,7 @@
 .envrc
 
 # build
-/lakehousewiki
+/lakehouse
 
 # database
 /postgresql/postgres-data/

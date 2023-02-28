@@ -70,21 +70,21 @@ chown -R deploy:www-data www/
 
 sudo -i -u deploy
 cd /var/www/
-git clone https://git.sr.ht/~sirodoht/lakehousewiki
-cd lakehousewiki
+git clone https://git.sr.ht/~sirodoht/lakehouse
+cd lakehouse
 go build
 cp .envrc.example .envrc
 vim .envrc
 exit
 
-cp /var/www/lakehousewiki/Caddyfile /etc/caddy/
+cp /var/www/lakehouse/Caddyfile /etc/caddy/
 systemctl reload caddy
 ```
 
 ## systemd
 
 ```sh
-cp /var/www/lakehousewiki/lakehouse-web.service /lib/systemd/system/
+cp /var/www/lakehouse/lakehouse-web.service /lib/systemd/system/
 ln -s /lib/systemd/system/lakehouse-web.service /etc/systemd/system/multi-user.target.wants/
 systemctl daemon-reload
 systemctl enable lakehouse-web.service

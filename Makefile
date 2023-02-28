@@ -19,7 +19,7 @@ serve:
 
 .PHONY: build
 build:
-	go build -v -o lakehousewiki ./cmd/server/main.go
+	go build -v -o lakehouse ./cmd/server/main.go
 	cd editor && npm install && npm run build
 
 .PHONY: test

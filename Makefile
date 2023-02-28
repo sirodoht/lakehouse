@@ -25,3 +25,7 @@ build:
 .PHONY: test
 test:
 	go test -v ./...
+
+.PHONY: deploy
+deploy:
+	ssh deploy@5.75.194.9 'cd /var/www/lakehouse && git pull && source ~/.profile && make build && sudo systemctl restart lakehouse-web'

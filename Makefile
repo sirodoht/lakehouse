@@ -5,13 +5,13 @@ all: lint serve
 lint:
 	GOGC=off golangci-lint run
 	cd websocket-server && npm run lint
-	cd editor && npm run lint
+	cd websocket-client && npm run lint
 
 .PHONY: format
 format:
 	go fmt ./...
 	cd websocket-server && npm run format
-	cd editor && npm run format
+	cd websocket-client && npm run format
 
 .PHONY: serve
 serve:
@@ -20,7 +20,7 @@ serve:
 .PHONY: build
 build:
 	go build -v -o lakehouse ./cmd/server/main.go
-	cd editor && npm install && npm run build
+	cd websocket-client && npm install && npm run build
 
 .PHONY: test
 test:

@@ -1,11 +1,11 @@
-# lakehousewiki
+# lakehouse
 
-Not a wiki.
+Fast docs with real-time collaboration.
 
 ## Development
 
-Source code on [sr.ht](https://git.sr.ht/~sirodoht/lakehousewiki),
-mirrored on [GitHub](https://github.com/sirodoht/lakehousewiki).
+Source code on [sr.ht](https://git.sr.ht/~sirodoht/lakehouse),
+mirrored on [GitHub](https://github.com/sirodoht/lakehouse).
 
 ### Database
 
@@ -35,12 +35,12 @@ npm install
 npm start
 ```
 
-### Frontend editor
+### Websocket client
 
-This is the frontend part of our real-time collaboration editor:
+This is the websocket client / frontend part of our real-time collaboration editor:
 
 ```sh
-cd editor/
+cd websocket-client/
 npm install
 npm run build  # one-off bundle.js generation
 npm run watch  # develop mood, watch for changes and rebuild

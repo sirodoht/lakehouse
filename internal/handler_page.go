@@ -32,11 +32,29 @@ func NewHandlerPage(store *SQLStore) *Page {
 	}
 }
 
+func (page *Page) RenderIndex(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	t, err := template.ParseFiles(
+		"internal/templates/layout.html",
+		"internal/templates/index.html",
+	)
+	if err != nil {
+		panic(err)
+	}
+	err = t.Execute(w, map[string]interface{}{
+		"IsAuthenticated": r.Context().Value(KeyIsAuthenticated),
+		"Username":        r.Context().Value(KeyUsername),
+	})
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (page *Page) RenderDashboard(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"lakehouse/templates/layout.html",
-		"lakehouse/templates/dashboard.html",
+		"internal/templates/layout.html",
+		"internal/templates/dashboard.html",
 	)
 	if err != nil {
 		page.logger.With(
@@ -57,8 +75,8 @@ func (page *Page) RenderDashboard(w http.ResponseWriter, r *http.Request) {
 func (page *Page) RenderLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"lakehouse/templates/layout.html",
-		"lakehouse/templates/login.html",
+		"internal/templates/layout.html",
+		"internal/templates/login.html",
 	)
 	if err != nil {
 		page.logger.With(
@@ -162,8 +180,8 @@ func (page *Page) CreateSession(w http.ResponseWriter, r *http.Request) {
 func (page *Page) RenderNewUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"lakehouse/templates/layout.html",
-		"lakehouse/templates/signup.html",
+		"internal/templates/layout.html",
+		"internal/templates/signup.html",
 	)
 	if err != nil {
 		page.logger.With(
@@ -250,8 +268,8 @@ func (page *Page) RenderOneDocument(w http.ResponseWriter, r *http.Request) {
 	// respond
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"lakehouse/templates/layout.html",
-		"lakehouse/templates/document.html",
+		"internal/templates/layout.html",
+		"internal/templates/document.html",
 	)
 	if err != nil {
 		panic(err)
@@ -283,8 +301,8 @@ func (page *Page) RenderAllDocument(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"lakehouse/templates/layout.html",
-		"lakehouse/templates/document_list.html",
+		"internal/templates/layout.html",
+		"internal/templates/document_list.html",
 	)
 	if err != nil {
 		panic(err)
@@ -302,8 +320,8 @@ func (page *Page) RenderAllDocument(w http.ResponseWriter, r *http.Request) {
 func (page *Page) RenderNewDocument(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"lakehouse/templates/layout.html",
-		"lakehouse/templates/document_new.html",
+		"internal/templates/layout.html",
+		"internal/templates/document_new.html",
 	)
 	if err != nil {
 		page.logger.With(
@@ -384,8 +402,8 @@ func (page *Page) RenderEditDocument(w http.ResponseWriter, r *http.Request) {
 	// render
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"lakehouse/templates/layout.html",
-		"lakehouse/templates/document_edit.html",
+		"internal/templates/layout.html",
+		"internal/templates/document_edit.html",
 	)
 	if err != nil {
 		page.logger.With(
@@ -447,8 +465,8 @@ func (page *Page) SaveEditDocument(w http.ResponseWriter, r *http.Request) {
 func (page *Page) RenderEditor(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles(
-		"lakehouse/templates/layout.html",
-		"lakehouse/templates/editor.html",
+		"internal/templates/layout.html",
+		"internal/templates/editor.html",
 	)
 	if err != nil {
 		page.logger.With(

@@ -3,12 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"html/template"
 	"net/http"
 	"os"
 	"time"
 
-	"git.sr.ht/~sirodoht/lakehousewiki/lakehouse"
+	lakehouse "git.sr.ht/~sirodoht/lakehouse/internal"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -56,23 +55,8 @@ func main() {
 		})
 	})
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		t, err := template.ParseFiles(
-			"lakehouse/templates/layout.html",
-			"lakehouse/templates/index.html",
-		)
-		if err != nil {
-			panic(err)
-		}
-		err = t.Execute(w, map[string]interface{}{
-			"IsAuthenticated": r.Context().Value(lakehouse.KeyIsAuthenticated),
-			"Username":        r.Context().Value(lakehouse.KeyUsername),
-		})
-		if err != nil {
-			panic(err)
-		}
-	})
+	// Page Index
+	r.Get("/", handlerPage.RenderIndex)
 
 	// Page Documents
 	r.Get("/docs", handlerPage.RenderAllDocument)

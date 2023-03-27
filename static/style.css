@@ -150,10 +150,15 @@ summary {
 :root {
     --link-color: #1175e2;
     --ascent-color: #006cdf;
-    --gray-500-color: #757575;
-    --gray-300-color: #b1b1b1;
-    --gray-200-color: #eff1f5;
-    --gray-100-color: #fafafa;
+    --gray-100-color: #f3f4f6;
+    --gray-200-color: #e5e7eb;
+    --gray-300-color: #d1d5db;
+    --gray-400-color: #9ca3af;
+    --gray-500-color: #6b7280;
+    --gray-600-color: #4b5563;
+    --gray-700-color: #374151;
+    --gray-800-color: #1f2937;
+    --gray-900-color: #111827;
     --green-color: #26bd60;
     --red-color: #ff0000;
     --purple-color: #cd1ecd;
@@ -301,7 +306,7 @@ nav {
 
 nav a {
     display: inline-block;
-    border: 1px dotted var(--gray-500-color);
+    border: 1px solid var(--gray-300-color);
     padding: 0 8px;
     white-space: nowrap;
     margin-bottom: 4px;
@@ -508,7 +513,7 @@ form .helptext {
 
 .landing-cta {
     display: block;
-    border: 1px dotted var(--gray-500-color);
+    border: 1px solid var(--gray-300-color);
     padding: 8px 16px;
 }
 

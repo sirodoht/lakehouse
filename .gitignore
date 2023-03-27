@@ -4,8 +4,9 @@
 # build
 /lakehouse
 
-# database
+# databases
 /postgresql/postgres-data/
+db.sqlite
 
 # dependencies
 node_modules/

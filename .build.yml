@@ -3,7 +3,7 @@ arch: amd64
 packages:
   - postgresql
 secrets:
-- 46f739e5-4538-45dd-a79f-bf173b7a2ed9
+  - 46f739e5-4538-45dd-a79f-bf173b7a2ed9
 tasks:
   - build: |
       curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - &&

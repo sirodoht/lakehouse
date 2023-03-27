@@ -98,3 +98,25 @@ visudo
 # # Allow deploy user to restart apps
 # %deploy ALL=NOPASSWD: /usr/bin/systemctl restart lakehouse-web.service
 ```
+
+## Continuous deployment
+
+* create deploy user with empty password (just leave empty repeatedly)
+* add user to groups caddy and www-data
+* create ssh key
+* add ssh key to sr.ht
+* add ssh key as an authorised incoming key too
+
+```sh
+sudo -i -u deploy
+
+# generate ssh key
+ssh-keygen -t ed25519
+
+# copy private key and add to sr.ht builds CI as a new variable named `SSH_PRIVATE_KEY`
+cat ~/.ssh/id_ed25519
+
+# copy public key (should be one line) and add it in `~/.ssh/authorized_keys`,
+# so that sr.ht, with this key, can ssh into server
+cat ~/.ssh/id_ed25519.pub
+```

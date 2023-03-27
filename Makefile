@@ -28,4 +28,6 @@ test:
 
 .PHONY: deploy
 deploy:
-	ssh deploy@5.75.194.9 'cd /var/www/lakehouse && git pull && source ~/.profile && make build && sudo systemctl restart lakehouse-web'
+	GOOS=linux GOARCH=amd64 go build -v -o lakehouse ./cmd/server/main.go
+	scp ./lakehouse deploy@5.75.194.9:/var/www/lakehouse/
+	ssh deploy@5.75.194.9 sudo systemctl restart lakehouse-web

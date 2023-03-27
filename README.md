@@ -46,6 +46,26 @@ npm run build  # one-off bundle.js generation
 npm run watch  # develop mood, watch for changes and rebuild
 ```
 
+## Dependencies
+
+To upgrade dependencies for each service:
+
+```sh
+go get -u all
+```
+
+```sh
+cd websocket-server/
+npx ncu -u
+npm install
+```
+
+```sh
+cd websocket-client/
+npx ncu -u
+npm install
+```
+
 ## Deployment
 
 ```sh

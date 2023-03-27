@@ -1,4 +1,4 @@
-package lakehouse
+package internal
 
 import (
 	"database/sql"

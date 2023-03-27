@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	lakehouse "git.sr.ht/~sirodoht/lakehouse/internal"
+	"git.sr.ht/~sirodoht/lakehouse/internal"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -27,9 +27,9 @@ func main() {
 	}
 
 	// instantiate
-	store := lakehouse.NewSQLStore(db)
-	handlerAPI := lakehouse.NewHandlerAPI(store)
-	handlerPage := lakehouse.NewHandlerPage(store)
+	store := internal.NewSQLStore(db)
+	handlerAPI := internal.NewHandlerAPI(store)
+	handlerPage := internal.NewHandlerPage(store)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -48,8 +48,8 @@ func main() {
 					isAuthenticated = true
 				}
 			}
-			ctx := context.WithValue(r.Context(), lakehouse.KeyUsername, username)
-			ctx = context.WithValue(ctx, lakehouse.KeyIsAuthenticated, isAuthenticated)
+			ctx := context.WithValue(r.Context(), internal.KeyUsername, username)
+			ctx = context.WithValue(ctx, internal.KeyIsAuthenticated, isAuthenticated)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

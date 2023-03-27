@@ -1,4 +1,4 @@
-package lakehouse
+package internal
 
 type ContextKey int
 

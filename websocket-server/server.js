@@ -10,7 +10,7 @@ const server = Server.configure({
 
   extensions: [
     new SQLite({
-      database: "db.sqlite",
+      database: "../db.sqlite",
     }),
   ],
 });

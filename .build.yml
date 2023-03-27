@@ -3,8 +3,10 @@ packages:
   - postgresql
 tasks:
   - build: |
-      cd lakehouse
       wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
+      sudo tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz
+      export PATH=/usr/local/go/bin:$PATH
+      cd lakehouse
       make build
   - test: |
       cd lakehouse

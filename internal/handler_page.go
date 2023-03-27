@@ -1,4 +1,4 @@
-package lakehouse
+package internal
 
 import (
 	"crypto/rand"
@@ -262,7 +262,8 @@ func (page *Page) RenderOneDocument(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// compile markdown to html
-	unsafeHTML := blackfriday.Run([]byte(doc.Body))
+	markdownWithUnixLineEndings := strings.Replace(doc.Body, "\r\n", "\n", -1)
+	unsafeHTML := blackfriday.Run([]byte(markdownWithUnixLineEndings))
 	bodyHTML := bluemonday.UGCPolicy().SanitizeBytes(unsafeHTML)
 
 	// respond

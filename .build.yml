@@ -1,9 +1,10 @@
 image: ubuntu/22.04
+arch: amd64
 packages:
   - postgresql
 tasks:
   - build: |
-      curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&
+      curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - &&
       sudo apt-get install -y nodejs
       wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
       sudo tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz
@@ -11,11 +12,14 @@ tasks:
       cd lakehouse
       make build
   - test: |
+      export PATH=/usr/local/go/bin:$PATH
       cd lakehouse
       make test
   - lint: |
+      export PATH=/usr/local/go/bin:$PATH
       cd lakehouse
       make lint
   - deploy: |
+      export PATH=/usr/local/go/bin:$PATH
       cd lakehouse
       make deploy

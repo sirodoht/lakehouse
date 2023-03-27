@@ -1,0 +1,14 @@
+image: ubuntu/22.04
+packages:
+  - go
+  - postgresql
+tasks:
+  - build: |
+      cd lakehouse
+      make build
+  - test: |
+      cd lakehouse
+      make test
+  - lint: |
+      cd lakehouse
+      make lint

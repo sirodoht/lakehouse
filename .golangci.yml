@@ -45,7 +45,7 @@ issues:
       text: "G203:"
 
 run:
-  go: "1.19"
+  go: "1.20"
   timeout: 2m
   allow-parallel-runners: true
   modules-download-mode: readonly

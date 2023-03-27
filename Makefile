@@ -29,5 +29,5 @@ test:
 .PHONY: deploy
 deploy:
 	GOOS=linux GOARCH=amd64 go build -v -o lakehouse ./cmd/server/main.go
-	scp ./lakehouse deploy@5.75.194.9:/var/www/lakehouse/
-	ssh deploy@5.75.194.9 sudo systemctl restart lakehouse-web
+	scp -o StrictHostKeyChecking=no ./lakehouse deploy@5.75.194.9:/var/www/lakehouse/
+	ssh -o StrictHostKeyChecking=no deploy@5.75.194.9 sudo systemctl restart lakehouse-web

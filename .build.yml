@@ -1,10 +1,10 @@
 image: ubuntu/22.04
 packages:
-  - go
   - postgresql
 tasks:
   - build: |
       cd lakehouse
+      wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
       make build
   - test: |
       cd lakehouse

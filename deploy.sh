@@ -30,10 +30,10 @@ main() {
     git push -v github master
 
     # pull on server and reload
-    ssh deploy@5.75.194.9 'cd /var/www/lakehouse ' \
-        '&& git pull ' \
-        '&& source ~/.profile && make build ' \
-        '&& sudo systemctl restart lakehouse-web'
+    #ssh deploy@5.75.194.9 'cd /var/www/lakehouse ' \
+    #    '&& git pull ' \
+    #    '&& source ~/.profile && make build ' \
+    #    '&& sudo systemctl restart lakehouse-web'
 }
 
 main "$@"

@@ -10,11 +10,8 @@ const provider = new HocuspocusProvider({
   name: DOCUMENT_NAME, // eslint-disable-line no-undef
 });
 
-// instantiate tiptap editor
 new Editor({
-  // element: document.querySelector("#id_body"),
-  element: document.querySelector(".element"),
-  // content: DOCUMENT_BODY,
+  element: document.querySelector("#id_body"),
   extensions: [
     StarterKit.configure({
       // The Collaboration extension comes with its own history handling

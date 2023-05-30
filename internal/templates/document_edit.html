@@ -9,7 +9,7 @@
         <p>
             <label for="id_body">body</label>
 
-            <div class="element" style="border: 1px solid black">
+            <div id="id_body" style="border: 1px solid black">
             </div>
 
             <!-- <textarea rows="10" name="body" id="id_body">{{.Document.Body}}</textarea> -->
@@ -21,7 +21,6 @@
 {{define "scripts"}}
 <script>
     const DOCUMENT_NAME = "document-{{.Document.ID}}";
-    const DOCUMENT_BODY = "document-{{.Document.Body}}";
 </script>
 <script type="module" src="/static/bundle.js"></script>
 {{end}}

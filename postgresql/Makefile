@@ -1,5 +1,5 @@
-.PHONY: init
-init:
+.PHONY: pginit
+pginit:
 	PGDATA=postgres-data/ pg_ctl init
 	PGDATA=postgres-data/ pg_ctl start
 	createuser lakehouse
@@ -7,10 +7,10 @@ init:
 	psql -U lakehouse -d postgres -c "CREATE DATABASE lakehouse;"
 	psql -U lakehouse -d lakehouse -f schema.sql
 
-.PHONY: start
-start:
+.PHONY: pgstart
+pgstart:
 	PGDATA=postgres-data/ pg_ctl start
 
-.PHONY: stop
-stop:
+.PHONY: pgstop
+pgstop:
 	PGDATA=postgres-data/ pg_ctl stop
